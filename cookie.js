@@ -24,16 +24,16 @@ export class CookieUtil {
 
 };
 
-function getName(name){ 
-    let data = document.cookie;  //ดึงข้อมูลของ cookie เข้ามา
+function getName(name) {
+    let data = document.cookie; //ดึงข้อมูลของ cookie เข้ามา
     let arrayOfCookie = data.split('; '); //แยกข้อมูลcookie ของแต่ละตัว จะตัดทุกครั้งที่เจอ ;
-    for(let i of arrayOfCookie){  //loop ของทั้งหมดที่มีใน cookie 
+    for (let i of arrayOfCookie) { //loop ของทั้งหมดที่มีใน cookie 
         let key = i.split('='); //แยกค่า key value ออกจากกัน
-        if(key[0] == name){ //เช็คค่า key ว่าเท่ากับ name ไหม
+        if (key[0] == name) { //เช็คค่า key ว่าเท่ากับ name ไหม
             return key[1]; //ถ้าเท่ากัน return value 
         }
     }
 }
-CookieUtil.set("username" , "guest" , new Date('January 1, 2022'));
+CookieUtil.set("username", "guest", new Date('January 1, 2022'));
 let user = document.querySelector("#user")
-user.textContent += `Welcome : ${getName("username")}`
+user.textContent += `ยินดีต้อนรับ : ${getName("username")}`

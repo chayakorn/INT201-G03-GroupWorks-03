@@ -8,20 +8,78 @@ let light = document.querySelector('#light')
 let foodlist = document.querySelector("#food-list"); //ให้ foodlist เก็บค่า element ที่มี ID เป็น food-list 
 let cart = new Cart(); //สร้าง obj ที่เก็บข้อมูลสินค้า ยอดราคารวม สินค้าในตระกร้า และจำนวนของสินค้า
 
+let modal = document.querySelector("#modal");
+let content = document.querySelector("#content");
+let buy = document.querySelector("#buy");
 
 //showcart
 cartIcon.addEventListener('click', () => {
-    alert(showCart());
-})
-export default function showCart() {
-    let string = ""
-    for (let i of cart.items) {
-        string += `${i.product.name} Price : ${i.product.price} Baht Qty : ${i.qty}\n`
+    modal.style.display = "block";
+    showCart();
+
+});
+
+window.onclick = (event) => {
+    if (event.target == modal) {
+        clearViewCart();
+
     }
-    string += `\n Total Qty : ${cart.totalQty}`;
-    string += `\n Total Price : ${cart.totalPrice} Baht`;
-    return string;
 }
+
+function clearViewCart() {
+    modal.style.display = "none";
+    content.innerHTML = `<tr>
+            <th>ลำดับ</th>
+            <th>ชื่อรายการ</th>
+            <th>ราคา (ชิ้น)</th>
+            <th>จำนวน</th>
+            <th>ราคา</th>
+
+        </tr>`;
+}
+// export default function showCart() {
+//     let string = ""
+//     for (let i of cart.items) {
+//         string += `${i.product.name} Price : ${i.product.price} Baht Qty : ${i.qty}\n`
+//     }
+//     string += `\n Total Qty : ${cart.totalQty}`;
+//     string += `\n Total Price : ${cart.totalPrice} Baht`;
+//     return string;
+// }
+
+function showCart() {
+    if (cart.items.length > 0) {
+        cart.items.forEach((item, index) => {
+            content.innerHTML += `
+            <tr>
+            <td>${index+1}</td>
+            <td>${item.product.name}</td>
+            <td>${item.product.price}</td>
+            <td>${item.qty}</td>
+            <td>${item.qty*item.product.price}</td>
+            </tr>`;
+            buy.setAttribute("class", "");
+        })
+        content.innerHTML += `<tr>
+            <td></td>
+            <td></td>
+            <td><b>รวม</b></td>
+            <td>${cart.totalQty}</td>
+            <td>${cart.totalPrice}</td>
+            </tr>
+            `
+
+
+    } else {
+        content.innerHTML = "ยังไม่มีสินค้า"
+        buy.setAttribute("class", "d-none")
+    }
+}
+buy.firstChild.addEventListener('click', () => {
+    alert("Thank you!!");
+    clearViewCart();
+    canCel();
+})
 
 let countEle = document.getElementById("count-el"); //ให้ countEle เก็บค่า element ที่มี ID เป็น count-el
 let countPriceEle = document.getElementById("countPrice-el"); //ให้ countPriceEle เก็บค่า element ที่มี ID = countPrice-el
@@ -63,7 +121,9 @@ searchValue.addEventListener("keyup", () => {
 
 
 //set event handle ของ searchIcon เป็น click โดนจะทำการเรียกใช้ function ที่เมื่อเรากดที่ icon จะทำการแสดงและซ่อน search panel 
-searchIcon.addEventListener("click", () => {
+searchIcon.addEventListener("click", toggleSearch);
+
+function toggleSearch() {
     //function จะเปลี่ยนค่าของ boolSearch จะเปลี่ยนเป็น true เพื่อให้เข้าเงื่อนไข if และแสดงแถบ searchbar ขึ้นมา
     //และถ้ากดอีกครั้ง searchbar จะหายไปเพราะเข้าเงื่อนไข else 
     boolSearch = !boolSearch;
@@ -75,12 +135,14 @@ searchIcon.addEventListener("click", () => {
         searchValue.value = "";
     }
     list(product)
-});
+
+}
 
 //function แสดงรายการสินค้า
 function list(product2 = product1) {
     if (CookieUtil.get("cart") != null) {
-        cart = JSON.parse(CookieUtil.get("cart"))
+        cart = Cart.toCart(JSON.parse(CookieUtil.get("cart")));
+        console.log(cart);
     }
     cal();
     foodlist.innerHTML = "";
@@ -112,7 +174,7 @@ function list(product2 = product1) {
         //ให้ tag button มีข้อความข้างในว่า Add to cart และ ไอค่อน + 
         buttn.innerHTML = ` <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus " viewBox="0 0 16 16">
         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-      </svg> Add to cart`;
+      </svg> เพิ่มลงตะกร้า`;
         divBttn.appendChild(buttn); //append เข้าใน butt (button)
         ele.appendChild(divBttn); //append เข้าใน dibBttn (div)
 
@@ -130,14 +192,6 @@ function list(product2 = product1) {
 
         }
 
-        //function canCel นำสินค้าในตะกร้าออก
-        function canCel() {
-            CookieUtil.unset("cart");
-            cart.clear();
-            cal();
-        }
-
-
         //กำหนดให้เมื่อกด buttnCancel จะเรียกใช้ function canCel()
         buttnCanCel.addEventListener("click", canCel, false);
 
@@ -151,11 +205,17 @@ function list(product2 = product1) {
         }, false);
 
     }
-    //function cal คำนวณจำนวนสินค้า และราคาสินค้า
-    function cal() {
-        countEle.textContent = cart.totalQty;
-        countPriceEle.textContent = cart.totalPrice;
-    }
+
+} //function canCel นำสินค้าในตะกร้าออก
+function canCel() {
+    CookieUtil.unset("cart");
+    cart.clear();
+    cal();
+}
+//function cal คำนวณจำนวนสินค้า และราคาสินค้า
+function cal() {
+    countEle.textContent = cart.totalQty;
+    countPriceEle.textContent = cart.totalPrice;
 }
 
 //change bg

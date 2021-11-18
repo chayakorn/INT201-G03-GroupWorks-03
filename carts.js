@@ -48,4 +48,12 @@ export class Cart {
             this.totalQty += pc.qty;
         })
     }
+    static toCart(obj) {
+        let cart = new Cart();
+        cart.items = obj.items;
+        cart.totalPrice = obj.totalPrice;
+        cart.itemIdIncart = obj.itemIdIncart;
+        cart.totalQty = obj.totalQty;
+        return cart;
+    }
 }
