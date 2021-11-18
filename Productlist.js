@@ -3,8 +3,8 @@ import { CookieUtil } from "./cookie.js";
 import { Cart } from "./carts.js";
 import { Theme } from "./theme.js"
 
-let dark = document.querySelector('#dark')
-let light = document.querySelector('#light')
+let dark = document.querySelector('#dark');
+let light = document.querySelector('#light');
 let foodlist = document.querySelector("#food-list"); //ให้ foodlist เก็บค่า element ที่มี ID เป็น food-list 
 let cart = new Cart(); //สร้าง obj ที่เก็บข้อมูลสินค้า ยอดราคารวม สินค้าในตระกร้า และจำนวนของสินค้า
 
@@ -12,9 +12,12 @@ let modal = document.querySelector("#modal");
 let content = document.querySelector("#content");
 let buy = document.querySelector("#buy");
 
+
+
 //showcart
 cartIcon.addEventListener('click', () => {
     modal.style.display = "block";
+
     showCart();
 
 });
@@ -27,8 +30,13 @@ window.onclick = (event) => {
 }
 
 function clearViewCart() {
-    modal.style.display = "none";
-    content.innerHTML = `<tr>
+    setTimeout(() => {
+        modal.style.display = "none";
+    }, 150)
+    document.querySelector(".modal-content").style.visibility = "hidden";
+    document.querySelector(".modal-content").style.width = "50%";
+    setTimeout(() => {
+        content.innerHTML = `<tr>
             <th>ลำดับ</th>
             <th>ชื่อรายการ</th>
             <th>ราคา (ชิ้น)</th>
@@ -36,7 +44,9 @@ function clearViewCart() {
             <th>ราคา</th>
 
         </tr>`;
+    }, 150)
 }
+
 // export default function showCart() {
 //     let string = ""
 //     for (let i of cart.items) {
@@ -48,15 +58,21 @@ function clearViewCart() {
 // }
 
 function showCart() {
+    document.querySelector(".modal-content").style.visibility = "visible";
+    setTimeout(() => {
+        document.querySelector(".modal-content").style.width = "60%";
+    }, 1);
+
+
     if (cart.items.length > 0) {
         cart.items.forEach((item, index) => {
             content.innerHTML += `
             <tr>
             <td>${index+1}</td>
             <td>${item.product.name}</td>
-            <td>${item.product.price}</td>
+            <td>${item.product.price} บาท</td>
             <td>${item.qty}</td>
-            <td>${item.qty*item.product.price}</td>
+            <td>${item.qty*item.product.price} บาท</td>
             </tr>`;
             buy.setAttribute("class", "");
         })
@@ -65,7 +81,7 @@ function showCart() {
             <td></td>
             <td><b>รวม</b></td>
             <td>${cart.totalQty}</td>
-            <td>${cart.totalPrice}</td>
+            <td>${cart.totalPrice} บาท</td>
             </tr>
             `
 
@@ -75,11 +91,17 @@ function showCart() {
         buy.setAttribute("class", "d-none")
     }
 }
-buy.firstChild.addEventListener('click', () => {
-    alert("Thank you!!");
+buy.lastChild.addEventListener('click', () => {
+    alert(`ขอบคุณที่อุดหนุนร้านอาหารแช่แข็งของเรา\nมูลค่าสุทธิ: ${cart.totalPrice} บาท`);
     clearViewCart();
     canCel();
 })
+buy.firstChild.addEventListener('click', () => {
+    clearViewCart();
+
+
+})
+
 
 let countEle = document.getElementById("count-el"); //ให้ countEle เก็บค่า element ที่มี ID เป็น count-el
 let countPriceEle = document.getElementById("countPrice-el"); //ให้ countPriceEle เก็บค่า element ที่มี ID = countPrice-el
@@ -99,7 +121,7 @@ if (theme == "dark") {
 } //หา element ที่มี id เป็น searchbar 
 //และใช้คำสั่ง innerHTML สร้าง element input เพื่อสร้างแถบ searchbar
 let searchbar = document.querySelector("#searchbar");
-searchbar.innerHTML += `<input type="text" id="searchValue" placeholder="ชื่ออาหาร เช่น กะเพราไก่ไข่ลูกเขย"  class="form-control d-none"></input>`;
+searchbar.innerHTML += `<input type="text" id="searchValue" placeholder="ชื่ออาหาร เช่น กะเพราไก่ไข่ลูกเขย"  class="form-control" style="visibility: hidden;width: 0;transition: all .5s linear;"></input>`;
 //ให้ searchValue เก็บค่าที่ถูกพิมพ์ลงใน searchbar ที่เราสร้างขึ้น
 let searchValue = document.querySelector("#searchValue");
 
@@ -128,10 +150,12 @@ function toggleSearch() {
     //และถ้ากดอีกครั้ง searchbar จะหายไปเพราะเข้าเงื่อนไข else 
     boolSearch = !boolSearch;
     if (boolSearch) {
-        searchValue.setAttribute("class", "form-control d-none")
+        searchValue.style.width = "0";
+        searchValue.style.visibility = "hidden"
 
     } else {
-        searchValue.setAttribute("class", "form-control")
+        searchValue.style.width = "";
+        searchValue.style.visibility = "visible"
         searchValue.value = "";
     }
     list(product)
