@@ -17,7 +17,6 @@ let buy = document.querySelector("#buy");
 //showcart
 cartIcon.addEventListener('click', () => {
     modal.style.display = "block";
-
     showCart();
 
 });
@@ -72,7 +71,7 @@ function showCart() {
             <td>${item.product.name}</td>
             <td>${item.product.price} บาท</td>
             <td>${item.qty}</td>
-            <td>${item.qty*item.product.price} บาท</td>
+            <td>${item.qty*item.product.price}บาท</td>
             </tr>`;
             buy.setAttribute("class", "");
         })
@@ -111,14 +110,12 @@ let searchIcon = document.querySelector("#search"); //ให้ searchIcon เ�
 let boolSearch = true;
 let product1 = product;
 list();
+
+
 let theme = localStorage.getItem("theme");
-if (theme == "dark") {
-    Theme.dark();
+theme == "dark" ? Theme.dark() : Theme.light();
 
-} else {
-    Theme.light();
-
-} //หา element ที่มี id เป็น searchbar 
+//หา element ที่มี id เป็น searchbar 
 //และใช้คำสั่ง innerHTML สร้าง element input เพื่อสร้างแถบ searchbar
 let searchbar = document.querySelector("#searchbar");
 searchbar.innerHTML += `<input type="text" id="searchValue" placeholder="ชื่ออาหาร เช่น กะเพราไก่ไข่ลูกเขย"  class="form-control" style="visibility: hidden;width: 0;transition: all .5s linear;"></input>`;

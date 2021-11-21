@@ -48,6 +48,15 @@ export class Cart {
             this.totalQty += pc.qty;
         })
     }
+    removeItem(p) {
+        this.totalPrice = 0;
+        this.totalQty = 0;
+        this.items.forEach((pc) => {
+            pc.product.id == p.id ? pc.qty-- : pc.qty;
+            this.totalPrice += pc.product.price * pc.qty;
+            this.totalQty += pc.qty;
+        })
+    }
     static toCart(obj) {
         let cart = new Cart();
         cart.items = obj.items;
