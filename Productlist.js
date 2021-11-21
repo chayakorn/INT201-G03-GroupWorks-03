@@ -71,7 +71,7 @@ function showCart() {
             <td>${item.product.name}</td>
             <td>${item.product.price} บาท</td>
             <td>${item.qty}</td>
-            <td>${item.qty*item.product.price}บาท</td>
+            <td>${item.qty*item.product.price} บาท</td>
             </tr>`;
             buy.setAttribute("class", "");
         })
