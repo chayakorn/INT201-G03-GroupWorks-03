@@ -15,6 +15,7 @@ let buy = document.querySelector("#buy");
 //showcart
 cartIcon.addEventListener('click', () => {
     modal.style.display = "block";
+
     showCart();
 
 });
@@ -108,12 +109,14 @@ let searchIcon = document.querySelector("#search"); //ให้ searchIcon เ�
 let boolSearch = true;
 let product1 = product;
 list();
-
-
 let theme = localStorage.getItem("theme");
-theme == "dark" ? Theme.dark() : Theme.light();
+if (theme == "dark") {
+    Theme.dark();
 
-//หา element ที่มี id เป็น searchbar 
+} else {
+    Theme.light();
+
+} //หา element ที่มี id เป็น searchbar 
 //และใช้คำสั่ง innerHTML สร้าง element input เพื่อสร้างแถบ searchbar
 let searchbar = document.querySelector("#searchbar");
 searchbar.innerHTML += `<input type="text" id="searchValue" placeholder="ชื่ออาหาร เช่น กะเพราไก่ไข่ลูกเขย"  class="form-control" style="visibility: hidden;width: 0;transition: all .5s linear;"></input>`;
@@ -154,7 +157,6 @@ function toggleSearch() {
         searchValue.value = "";
     }
     list(product)
-
 }
 
 //function แสดงรายการสินค้า
@@ -206,7 +208,7 @@ function list(product2 = product1) {
                     qty = item.qty;
                 }
             });
-            CookieUtil.set(`${p.nameEng}`, qty, new Date('January 1, 2022'));
+            CookieUtil.set("cart", JSON.stringify(cart), new Date('January 1, 2022'));
             cal(); //เรียกใช้ function cal()
 
         }
@@ -254,5 +256,3 @@ light.addEventListener('click',
         light.style.backgroundColor = '#000000';
         localStorage.setItem("theme", "dark")
     });
-
-
