@@ -2,18 +2,15 @@
 //     productadded: [],
 //     add: function (product) {
 //         cartEven.productadded = localStorage.getItem('cart');
-
 //         if(cartEven.productadded == undefined || cartEven.productadded.length === 0 ) {
 //             cartEven.productadded = [];
 //         }else {
 //             cartEven.productadded = JSON.parse(cartEven.productadded);}
 //         let foundIndex = -1;
-
 //         foundIndex = cartEven.productadded.findIndex(
 //             (product) => {
 //                 product.id === product.id ;
 //             });
-
 //         if (foundIndex === -1){
 //             cartEven.productadded.push({Id: product.id,qty: 1});
 //         }else {

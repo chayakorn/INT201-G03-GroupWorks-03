@@ -12,8 +12,6 @@ let modal = document.querySelector("#modal");
 let content = document.querySelector("#content");
 let buy = document.querySelector("#buy");
 
-
-
 //showcart
 cartIcon.addEventListener('click', () => {
     modal.style.display = "block";
@@ -211,7 +209,7 @@ function list(product2 = product1) {
                     qty = item.qty;
                 }
             });
-            CookieUtil.set("cart", JSON.stringify(cart), Date('January 1, 2022'))
+            CookieUtil.set(`${p.nameEng}`, qty, new Date('January 1, 2022'));
             cal(); //เรียกใช้ function cal()
 
         }
@@ -242,6 +240,22 @@ function cal() {
     countPriceEle.textContent = cart.totalPrice;
 }
 
-//change bg
-dark.addEventListener('click', Theme.dark);
-light.addEventListener('click', Theme.light);
+//change bg --------------------------------------------
+let bg = document.querySelector('body')
+bg.style.background = '#D3D3D3'
+
+
+dark.addEventListener('click',
+    function() {
+        bg.style.backgroundColor = '#D3D3D3';
+        dark.style.backgroundColor = '#currentColor';
+        localStorage.setItem("theme", "light");
+    });
+light.addEventListener('click',
+    function() {
+        bg.style.backgroundColor = '#444444';
+        light.style.backgroundColor = '#000000';
+        localStorage.setItem("theme", "dark")
+    });
+
+
