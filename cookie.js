@@ -35,5 +35,5 @@ function getName(name) {
     }
 }
 CookieUtil.set("username", "guest", new Date('January 1, 2022'));
-let user = document.querySelector("#user")
-user.textContent += `ยินดีต้อนรับ : ${getName("username")}`
+let user = document.querySelector("#user");
+user.textContent += `ยินดีต้อนรับ : ${getName("username")}`;

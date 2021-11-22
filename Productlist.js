@@ -12,10 +12,11 @@ let modal = document.querySelector("#modal");
 let content = document.querySelector("#content");
 let buy = document.querySelector("#buy");
 
+
+
 //showcart
 cartIcon.addEventListener('click', () => {
     modal.style.display = "block";
-
     showCart();
 
 });
@@ -40,7 +41,6 @@ function clearViewCart() {
             <th>ราคา (ชิ้น)</th>
             <th>จำนวน</th>
             <th>ราคา</th>
-
         </tr>`;
     }, 150)
 }
@@ -80,8 +80,7 @@ function showCart() {
             <td><b>รวม</b></td>
             <td>${cart.totalQty}</td>
             <td>${cart.totalPrice} บาท</td>
-            </tr>
-            `
+            </tr>`;
 
 
     } else {
@@ -97,7 +96,6 @@ buy.lastChild.addEventListener('click', () => {
 buy.firstChild.addEventListener('click', () => {
     clearViewCart();
 
-
 })
 
 
@@ -109,14 +107,12 @@ let searchIcon = document.querySelector("#search"); //ให้ searchIcon เ�
 let boolSearch = true;
 let product1 = product;
 list();
+
+
 let theme = localStorage.getItem("theme");
-if (theme == "dark") {
-    Theme.dark();
+theme == "dark" ? Theme.dark() : Theme.light();
 
-} else {
-    Theme.light();
-
-} //หา element ที่มี id เป็น searchbar 
+//หา element ที่มี id เป็น searchbar 
 //และใช้คำสั่ง innerHTML สร้าง element input เพื่อสร้างแถบ searchbar
 let searchbar = document.querySelector("#searchbar");
 searchbar.innerHTML += `<input type="text" id="searchValue" placeholder="ชื่ออาหาร เช่น กะเพราไก่ไข่ลูกเขย"  class="form-control" style="visibility: hidden;width: 0;transition: all .5s linear;"></input>`;
@@ -157,13 +153,13 @@ function toggleSearch() {
         searchValue.value = "";
     }
     list(product)
+
 }
 
 //function แสดงรายการสินค้า
 function list(product2 = product1) {
     if (CookieUtil.get("cart") != null) {
         cart = Cart.toCart(JSON.parse(CookieUtil.get("cart")));
-        console.log(cart);
     }
     cal();
     foodlist.innerHTML = "";
@@ -208,7 +204,7 @@ function list(product2 = product1) {
                     qty = item.qty;
                 }
             });
-            CookieUtil.set("cart", JSON.stringify(cart), new Date('January 1, 2022'));
+            CookieUtil.set("cart", JSON.stringify(cart), Date('January 1, 2022'))
             cal(); //เรียกใช้ function cal()
 
         }
@@ -222,7 +218,6 @@ function list(product2 = product1) {
         buttn.addEventListener("click", () => {
             cart.addItem(p);
             alertAdd();
-            console.log(cart.items);
         }, false);
 
     }
@@ -239,20 +234,6 @@ function cal() {
     countPriceEle.textContent = cart.totalPrice;
 }
 
-//change bg --------------------------------------------
-let bg = document.querySelector('body')
-bg.style.background = '#D3D3D3'
-
-
-dark.addEventListener('click',
-    function() {
-        bg.style.backgroundColor = '#D3D3D3';
-        dark.style.backgroundColor = '#currentColor';
-        localStorage.setItem("theme", "light");
-    });
-light.addEventListener('click',
-    function() {
-        bg.style.backgroundColor = '#444444';
-        light.style.backgroundColor = '#000000';
-        localStorage.setItem("theme", "dark")
-    });
+//change bg
+dark.addEventListener('click', Theme.dark);
+light.addEventListener('click', Theme.light);
